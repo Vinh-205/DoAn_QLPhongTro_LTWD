@@ -132,6 +132,7 @@
             this.btnTrangChu.TabIndex = 1;
             this.btnTrangChu.Text = "🏠 Trang chủ";
             this.btnTrangChu.UseVisualStyleBackColor = true;
+            this.btnTrangChu.Click += new System.EventHandler(this.btnTrangChu_Click);
             // 
             // btnMenu
             // 

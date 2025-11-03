@@ -8,11 +8,8 @@
         private System.Windows.Forms.Label lblTimKiem;
         private System.Windows.Forms.PictureBox picAnhMinhHoa;
         private System.Windows.Forms.Label lblTenPhong;
-        private System.Windows.Forms.Label lblLoaiPhong;
         private System.Windows.Forms.Label lblGiaThue;
-        private System.Windows.Forms.Label lblDienTich;
         private System.Windows.Forms.Label lblTrangThai;
-        private System.Windows.Forms.Label lblChuTro;
         private System.Windows.Forms.TextBox txtTienNghi;
         private System.Windows.Forms.GroupBox groupBoxChiTiet;
         private System.Windows.Forms.Label lblTitle;
@@ -31,11 +28,8 @@
             this.lblTimKiem = new System.Windows.Forms.Label();
             this.picAnhMinhHoa = new System.Windows.Forms.PictureBox();
             this.lblTenPhong = new System.Windows.Forms.Label();
-            this.lblLoaiPhong = new System.Windows.Forms.Label();
             this.lblGiaThue = new System.Windows.Forms.Label();
-            this.lblDienTich = new System.Windows.Forms.Label();
             this.lblTrangThai = new System.Windows.Forms.Label();
-            this.lblChuTro = new System.Windows.Forms.Label();
             this.txtTienNghi = new System.Windows.Forms.TextBox();
             this.groupBoxChiTiet = new System.Windows.Forms.GroupBox();
             this.lblTitle = new System.Windows.Forms.Label();
@@ -105,15 +99,6 @@
             this.lblTenPhong.TabIndex = 10;
             this.lblTenPhong.Text = "Tên phòng: ...";
             // 
-            // lblLoaiPhong
-            // 
-            this.lblLoaiPhong.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblLoaiPhong.Location = new System.Drawing.Point(20, 55);
-            this.lblLoaiPhong.Name = "lblLoaiPhong";
-            this.lblLoaiPhong.Size = new System.Drawing.Size(300, 23);
-            this.lblLoaiPhong.TabIndex = 9;
-            this.lblLoaiPhong.Text = "Loại phòng: ...";
-            // 
             // lblGiaThue
             // 
             this.lblGiaThue.Font = new System.Drawing.Font("Segoe UI", 9.5F);
@@ -123,15 +108,6 @@
             this.lblGiaThue.TabIndex = 8;
             this.lblGiaThue.Text = "Giá thuê: ...";
             // 
-            // lblDienTich
-            // 
-            this.lblDienTich.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblDienTich.Location = new System.Drawing.Point(20, 105);
-            this.lblDienTich.Name = "lblDienTich";
-            this.lblDienTich.Size = new System.Drawing.Size(300, 23);
-            this.lblDienTich.TabIndex = 7;
-            this.lblDienTich.Text = "Diện tích: ...";
-            // 
             // lblTrangThai
             // 
             this.lblTrangThai.Font = new System.Drawing.Font("Segoe UI", 9.5F);
@@ -140,15 +116,6 @@
             this.lblTrangThai.Size = new System.Drawing.Size(300, 23);
             this.lblTrangThai.TabIndex = 6;
             this.lblTrangThai.Text = "Trạng thái: ...";
-            // 
-            // lblChuTro
-            // 
-            this.lblChuTro.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblChuTro.Location = new System.Drawing.Point(20, 155);
-            this.lblChuTro.Name = "lblChuTro";
-            this.lblChuTro.Size = new System.Drawing.Size(300, 23);
-            this.lblChuTro.TabIndex = 0;
-            this.lblChuTro.Text = "Chủ trọ: ...";
             // 
             // txtTienNghi
             // 
@@ -165,12 +132,9 @@
             // groupBoxChiTiet
             // 
             this.groupBoxChiTiet.BackColor = System.Drawing.Color.White;
-            this.groupBoxChiTiet.Controls.Add(this.lblChuTro);
             this.groupBoxChiTiet.Controls.Add(this.txtTienNghi);
             this.groupBoxChiTiet.Controls.Add(this.lblTrangThai);
-            this.groupBoxChiTiet.Controls.Add(this.lblDienTich);
             this.groupBoxChiTiet.Controls.Add(this.lblGiaThue);
-            this.groupBoxChiTiet.Controls.Add(this.lblLoaiPhong);
             this.groupBoxChiTiet.Controls.Add(this.lblTenPhong);
             this.groupBoxChiTiet.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.groupBoxChiTiet.ForeColor = System.Drawing.Color.MidnightBlue;

@@ -25,6 +25,7 @@ namespace Phong_Tro_GUI.ConTrolUser
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ThongTinUser));
             this.picAvatar = new System.Windows.Forms.PictureBox();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblTen = new System.Windows.Forms.Label();
@@ -44,6 +45,7 @@ namespace Phong_Tro_GUI.ConTrolUser
             // 
             this.picAvatar.BackColor = System.Drawing.Color.WhiteSmoke;
             this.picAvatar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picAvatar.Image = ((System.Drawing.Image)(resources.GetObject("picAvatar.Image")));
             this.picAvatar.Location = new System.Drawing.Point(33, 90);
             this.picAvatar.Name = "picAvatar";
             this.picAvatar.Size = new System.Drawing.Size(160, 200);
@@ -69,7 +71,7 @@ namespace Phong_Tro_GUI.ConTrolUser
             this.lblTen.ForeColor = System.Drawing.Color.MidnightBlue;
             this.lblTen.Location = new System.Drawing.Point(10, 10);
             this.lblTen.Name = "lblTen";
-            this.lblTen.Size = new System.Drawing.Size(100, 23);
+            this.lblTen.Size = new System.Drawing.Size(524, 35);
             this.lblTen.TabIndex = 0;
             this.lblTen.Text = "👤 Tên: ";
             // 
@@ -78,7 +80,7 @@ namespace Phong_Tro_GUI.ConTrolUser
             this.lblSDT.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.lblSDT.Location = new System.Drawing.Point(10, 45);
             this.lblSDT.Name = "lblSDT";
-            this.lblSDT.Size = new System.Drawing.Size(100, 23);
+            this.lblSDT.Size = new System.Drawing.Size(524, 23);
             this.lblSDT.TabIndex = 1;
             this.lblSDT.Text = "📞 SĐT: ";
             // 
@@ -87,7 +89,7 @@ namespace Phong_Tro_GUI.ConTrolUser
             this.lblEmail.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.lblEmail.Location = new System.Drawing.Point(10, 75);
             this.lblEmail.Name = "lblEmail";
-            this.lblEmail.Size = new System.Drawing.Size(100, 23);
+            this.lblEmail.Size = new System.Drawing.Size(524, 23);
             this.lblEmail.TabIndex = 2;
             this.lblEmail.Text = "📧 Email: ";
             // 
@@ -96,7 +98,7 @@ namespace Phong_Tro_GUI.ConTrolUser
             this.lblCCCD.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.lblCCCD.Location = new System.Drawing.Point(10, 105);
             this.lblCCCD.Name = "lblCCCD";
-            this.lblCCCD.Size = new System.Drawing.Size(100, 23);
+            this.lblCCCD.Size = new System.Drawing.Size(524, 23);
             this.lblCCCD.TabIndex = 3;
             this.lblCCCD.Text = "🪪 CCCD: ";
             // 
@@ -105,7 +107,7 @@ namespace Phong_Tro_GUI.ConTrolUser
             this.lblNgaySinh.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.lblNgaySinh.Location = new System.Drawing.Point(10, 135);
             this.lblNgaySinh.Name = "lblNgaySinh";
-            this.lblNgaySinh.Size = new System.Drawing.Size(100, 23);
+            this.lblNgaySinh.Size = new System.Drawing.Size(524, 30);
             this.lblNgaySinh.TabIndex = 4;
             this.lblNgaySinh.Text = "🎂 Ngày sinh: ";
             // 
@@ -114,7 +116,7 @@ namespace Phong_Tro_GUI.ConTrolUser
             this.lblDiaChi.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.lblDiaChi.Location = new System.Drawing.Point(10, 165);
             this.lblDiaChi.Name = "lblDiaChi";
-            this.lblDiaChi.Size = new System.Drawing.Size(100, 23);
+            this.lblDiaChi.Size = new System.Drawing.Size(524, 24);
             this.lblDiaChi.TabIndex = 5;
             this.lblDiaChi.Text = "📍 Địa chỉ: ";
             // 
