@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Phong_Tro_BUS.Phong_Tro_BUS;
+using Phong_Tro_DAL.PhongTro;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using Phong_Tro_DAL.PhongTro;
 
 namespace Phong_Tro_BUS
 {
@@ -118,6 +119,27 @@ namespace Phong_Tro_BUS
             hd.NgayKetThuc = DateTime.Now;
             db.SaveChanges();
             return true;
+        }
+        // ======== LẤY HỢP ĐỒNG THEO NGƯỜI THUÊ ========
+        // ======== LẤY HỢP ĐỒNG THEO NGƯỜI THUÊ ========
+        public List<HopDongView> LayHopDongTheoNguoiThue(int maNguoiThue)
+        {
+            var ds = db.HopDongs
+                .Include(hd => hd.Phong)
+                .Include(hd => hd.KhachThue)
+                .Where(hd => hd.MaKhach == maNguoiThue)
+                .Select(hd => new HopDongView
+                {
+                    MaHopDong = hd.MaHopDong,
+                    TenPhong = hd.Phong != null ? hd.Phong.TenPhong : "Chưa có",
+                    NgayBatDau = hd.NgayBatDau,
+                    NgayKetThuc = hd.NgayKetThuc,
+                    TienThue = hd.TienThue,
+                    TrangThai = hd.TrangThai
+                })
+                .ToList();
+
+            return ds;
         }
 
         // ======== GIẢI PHÓNG TÀI NGUYÊN ========

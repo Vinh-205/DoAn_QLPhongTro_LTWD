@@ -3,6 +3,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using Phong_Tro_GUI.ConTrolUser;
 using Phong_Tro_GUI.ConTrolMain;
+using Phong_Tro_GUI;
+
 
 namespace Phong_Tro_GUI
 {
@@ -10,6 +12,7 @@ namespace Phong_Tro_GUI
     {
         private Panel activeIndicator;
         private int maKhachHienTai;
+        private PhongUser phongUser;
 
         public NguoiThueUser(int maKhach)
         {
@@ -74,14 +77,16 @@ namespace Phong_Tro_GUI
             LoadContent("🏠 Trang chủ người thuê");
             LoadControl(new ThongTinUser(maKhachHienTai));
         }
-
         private void btnPhong_Click(object sender, EventArgs e)
         {
             HighlightButton(btnPhong);
             LoadContent("🏢 Phòng đang thuê");
-            LoadControl(new PhongUser(maKhachHienTai));
-        }
 
+            if (phongUser == null)
+                phongUser = new PhongUser(maKhachHienTai);
+
+            LoadControl(phongUser);
+        }
         private void btnHoaDon_Click(object sender, EventArgs e)
         {
             HighlightButton(btnHoaDon);
@@ -105,22 +110,10 @@ namespace Phong_Tro_GUI
 
         private void btnDichVu_Click(object sender, EventArgs e)
         {
-            HighlightButton(btnDichVu);
+            HighlightButton(btnThongTin);
             LoadContent("🧰 Thông tin cá nhân");
             LoadControl(new ThongTinUser(maKhachHienTai));
         }
-
-        private void btnDangXuat_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("Bạn có chắc chắn muốn đăng xuất không?",
-                                "Xác nhận",
-                                MessageBoxButtons.YesNo,
-                                MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                Application.Restart();
-            }
-        }
-
         private void btnDangXuat_Click_1(object sender, EventArgs e)
         {
             if (MessageBox.Show("Bạn có chắc chắn muốn đăng xuất không?",
@@ -137,6 +130,31 @@ namespace Phong_Tro_GUI
                     frmDangNhap.Show(); // Hiển thị lại form đăng nhập
                 }
             }
+        }
+        private void btnYKien(object sender, EventArgs e)
+        {
+            var btn = sender as Button;
+            if (btn != null)
+                HighlightButton(btn);
+
+            LoadContent("✍️ Gửi ý kiến đến chủ trọ");
+            LoadControl(new YKienUser());
+        }
+
+        private void btnThongTin_Click(object sender, EventArgs e)
+        {
+            // Đổi màu nút đang chọn
+            HighlightButton(btnThongTin);
+
+            // Hiển thị nội dung
+            LoadContent("🧰 Thông tin cá nhân");
+            LoadControl(new ThongTinUser(maKhachHienTai));
+        }
+        private void btnHopDong_Click(object sender, EventArgs e)
+        {
+            HighlightButton(btnHopDong);
+            LoadContent("📄 Hợp đồng thuê phòng");
+            LoadControl(new HopDongUser(maKhachHienTai.ToString()));
         }
     }
 }

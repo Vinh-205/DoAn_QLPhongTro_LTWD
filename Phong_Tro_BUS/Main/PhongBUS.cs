@@ -6,6 +6,18 @@ using Phong_Tro_DAL.PhongTro;
 
 namespace Phong_Tro_BUS
 {
+    namespace Phong_Tro_BUS
+    {
+        public class HopDongView
+        {
+            public int MaHopDong { get; set; }
+            public string TenPhong { get; set; }
+            public System.DateTime NgayBatDau { get; set; }
+            public System.DateTime? NgayKetThuc { get; set; }
+            public decimal? TienThue { get; set; }
+            public string TrangThai { get; set; }
+        }
+    }
     public class PhongBUS : IDisposable
     {
         private readonly Connect db;

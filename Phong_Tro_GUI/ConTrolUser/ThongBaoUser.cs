@@ -3,6 +3,8 @@ using System.Linq;
 using System.Windows.Forms;
 using Phong_Tro_BUS;
 using Phong_Tro_DAL.PhongTro;
+using Phong_Tro_GUI.ConTrolUser;
+using Phong_Tro_GUI;
 
 namespace Phong_Tro_GUI.ConTrolUser
 {

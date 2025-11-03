@@ -21,7 +21,7 @@
             this.pnlSidebar = new System.Windows.Forms.Panel();
             this.btnDangXuat = new System.Windows.Forms.Button();
             this.btnHopDong = new System.Windows.Forms.Button();
-            this.btnDichVu = new System.Windows.Forms.Button();
+            this.btnThongTin = new System.Windows.Forms.Button();
             this.btnThongKe = new System.Windows.Forms.Button();
             this.btnThongBao = new System.Windows.Forms.Button();
             this.btnHoaDon = new System.Windows.Forms.Button();
@@ -41,7 +41,7 @@
             this.pnlSidebar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(60)))), ((int)(((byte)(120)))));
             this.pnlSidebar.Controls.Add(this.btnDangXuat);
             this.pnlSidebar.Controls.Add(this.btnHopDong);
-            this.pnlSidebar.Controls.Add(this.btnDichVu);
+            this.pnlSidebar.Controls.Add(this.btnThongTin);
             this.pnlSidebar.Controls.Add(this.btnThongKe);
             this.pnlSidebar.Controls.Add(this.btnThongBao);
             this.pnlSidebar.Controls.Add(this.btnHoaDon);
@@ -66,44 +66,47 @@
             // 
             // btnHopDong
             // 
-            this.btnHopDong.Location = new System.Drawing.Point(10, 370);
+            this.btnHopDong.Location = new System.Drawing.Point(10, 346);
             this.btnHopDong.Name = "btnHopDong";
             this.btnHopDong.Size = new System.Drawing.Size(180, 40);
             this.btnHopDong.TabIndex = 7;
-            this.btnHopDong.Text = "📢 Thông Báo";
+            this.btnHopDong.Text = "📄 Hợp Đồng";
             this.btnHopDong.UseVisualStyleBackColor = true;
+            this.btnHopDong.Click += new System.EventHandler(this.btnHopDong_Click);
             // 
-            // btnDichVu
+            // btnThongTin
             // 
-            this.btnDichVu.Location = new System.Drawing.Point(10, 320);
-            this.btnDichVu.Name = "btnDichVu";
-            this.btnDichVu.Size = new System.Drawing.Size(180, 40);
-            this.btnDichVu.TabIndex = 6;
-            this.btnDichVu.Text = "🧰 Thông Tin";
-            this.btnDichVu.UseVisualStyleBackColor = true;
+            this.btnThongTin.Location = new System.Drawing.Point(10, 300);
+            this.btnThongTin.Name = "btnThongTin";
+            this.btnThongTin.Size = new System.Drawing.Size(180, 40);
+            this.btnThongTin.TabIndex = 6;
+            this.btnThongTin.Text = "🧰 Thông Tin";
+            this.btnThongTin.UseVisualStyleBackColor = true;
+            this.btnThongTin.Click += new System.EventHandler(this.btnThongTin_Click);
             // 
             // btnThongKe
             // 
-            this.btnThongKe.Location = new System.Drawing.Point(10, 270);
+            this.btnThongKe.Location = new System.Drawing.Point(10, 254);
             this.btnThongKe.Name = "btnThongKe";
             this.btnThongKe.Size = new System.Drawing.Size(180, 40);
             this.btnThongKe.TabIndex = 5;
-            this.btnThongKe.Text = "✍️Ý Kiến";
+            this.btnThongKe.Text = "✍️ Ý Kiến";
             this.btnThongKe.UseVisualStyleBackColor = true;
+            this.btnThongKe.Click += new System.EventHandler(this.btnYKien);
             // 
             // btnThongBao
             // 
-            this.btnThongBao.Location = new System.Drawing.Point(10, 220);
+            this.btnThongBao.Location = new System.Drawing.Point(10, 208);
             this.btnThongBao.Name = "btnThongBao";
             this.btnThongBao.Size = new System.Drawing.Size(180, 40);
             this.btnThongBao.TabIndex = 4;
-            this.btnThongBao.Text = "💬 Thông báo";
+            this.btnThongBao.Text = "📢 Thông Báo";
             this.btnThongBao.UseVisualStyleBackColor = true;
             this.btnThongBao.Click += new System.EventHandler(this.btnThongBao_Click);
             // 
             // btnHoaDon
             // 
-            this.btnHoaDon.Location = new System.Drawing.Point(10, 170);
+            this.btnHoaDon.Location = new System.Drawing.Point(10, 162);
             this.btnHoaDon.Name = "btnHoaDon";
             this.btnHoaDon.Size = new System.Drawing.Size(180, 40);
             this.btnHoaDon.TabIndex = 3;
@@ -113,12 +116,13 @@
             // 
             // btnPhong
             // 
-            this.btnPhong.Location = new System.Drawing.Point(10, 120);
+            this.btnPhong.Location = new System.Drawing.Point(10, 116);
             this.btnPhong.Name = "btnPhong";
             this.btnPhong.Size = new System.Drawing.Size(180, 40);
             this.btnPhong.TabIndex = 2;
             this.btnPhong.Text = "🏢 Phòng";
             this.btnPhong.UseVisualStyleBackColor = true;
+            this.btnPhong.Click += new System.EventHandler(this.btnPhong_Click);
             // 
             // btnTrangChu
             // 
@@ -199,7 +203,7 @@
 
         }
 
-        private System.Windows.Forms.Button btnDichVu;
+        private System.Windows.Forms.Button btnThongTin;
         private System.Windows.Forms.Button btnThongKe;
     }
 }
