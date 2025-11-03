@@ -110,7 +110,7 @@
             this.lblLoaiPhong.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.lblLoaiPhong.Location = new System.Drawing.Point(20, 55);
             this.lblLoaiPhong.Name = "lblLoaiPhong";
-            this.lblLoaiPhong.Size = new System.Drawing.Size(100, 23);
+            this.lblLoaiPhong.Size = new System.Drawing.Size(300, 23);
             this.lblLoaiPhong.TabIndex = 9;
             this.lblLoaiPhong.Text = "Loại phòng: ...";
             // 
@@ -119,7 +119,7 @@
             this.lblGiaThue.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.lblGiaThue.Location = new System.Drawing.Point(20, 80);
             this.lblGiaThue.Name = "lblGiaThue";
-            this.lblGiaThue.Size = new System.Drawing.Size(100, 23);
+            this.lblGiaThue.Size = new System.Drawing.Size(300, 23);
             this.lblGiaThue.TabIndex = 8;
             this.lblGiaThue.Text = "Giá thuê: ...";
             // 
@@ -128,7 +128,7 @@
             this.lblDienTich.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.lblDienTich.Location = new System.Drawing.Point(20, 105);
             this.lblDienTich.Name = "lblDienTich";
-            this.lblDienTich.Size = new System.Drawing.Size(100, 23);
+            this.lblDienTich.Size = new System.Drawing.Size(300, 23);
             this.lblDienTich.TabIndex = 7;
             this.lblDienTich.Text = "Diện tích: ...";
             // 
@@ -137,7 +137,7 @@
             this.lblTrangThai.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.lblTrangThai.Location = new System.Drawing.Point(20, 130);
             this.lblTrangThai.Name = "lblTrangThai";
-            this.lblTrangThai.Size = new System.Drawing.Size(100, 23);
+            this.lblTrangThai.Size = new System.Drawing.Size(300, 23);
             this.lblTrangThai.TabIndex = 6;
             this.lblTrangThai.Text = "Trạng thái: ...";
             // 
@@ -146,7 +146,7 @@
             this.lblChuTro.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.lblChuTro.Location = new System.Drawing.Point(20, 155);
             this.lblChuTro.Name = "lblChuTro";
-            this.lblChuTro.Size = new System.Drawing.Size(100, 23);
+            this.lblChuTro.Size = new System.Drawing.Size(300, 23);
             this.lblChuTro.TabIndex = 0;
             this.lblChuTro.Text = "Chủ trọ: ...";
             // 

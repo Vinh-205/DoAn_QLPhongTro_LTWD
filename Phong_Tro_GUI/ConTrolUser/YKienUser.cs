@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Phong_Tro_GUI.ConTrolUser;
 using Phong_Tro_GUI.ConTrolMain;
+using Phong_Tro_GUI;
 
 namespace Phong_Tro_GUI.ConTrolUser
 {
