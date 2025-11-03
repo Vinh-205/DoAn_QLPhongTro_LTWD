@@ -64,6 +64,7 @@
             this.btnDangXuat.TabIndex = 8;
             this.btnDangXuat.Text = "🚪 Đăng xuất";
             this.btnDangXuat.UseVisualStyleBackColor = true;
+            this.btnDangXuat.Click += new System.EventHandler(this.btnDangXuat_Click);
             // 
             // btnHopDong
             // 
@@ -73,6 +74,7 @@
             this.btnHopDong.TabIndex = 7;
             this.btnHopDong.Text = "📜 Hợp đồng";
             this.btnHopDong.UseVisualStyleBackColor = true;
+            this.btnHopDong.Click += new System.EventHandler(this.btnHopDong_Click);
             // 
             // btnDichVu
             // 
@@ -190,13 +192,14 @@
             this.pnlContent.Name = "pnlContent";
             this.pnlContent.Size = new System.Drawing.Size(784, 561);
             this.pnlContent.TabIndex = 2;
+            this.pnlContent.Click += new System.EventHandler(this.btnDangXuat_Click);
             // 
-            // UC_ChuTro
+            // ChuTroMain
             // 
             this.Controls.Add(this.pnlContent);
             this.Controls.Add(this.pnlHeader);
             this.Controls.Add(this.pnlSidebar);
-            this.Name = "UC_ChuTro";
+            this.Name = "ChuTroMain";
             this.Size = new System.Drawing.Size(984, 631);
             this.pnlSidebar.ResumeLayout(false);
             this.pnlHeader.ResumeLayout(false);

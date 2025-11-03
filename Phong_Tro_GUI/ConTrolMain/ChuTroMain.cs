@@ -142,5 +142,11 @@ namespace Phong_Tro_GUI
             }
         }
 
+        private void btnHopDong_Click(object sender, EventArgs e)
+        {
+            MoveActiveBorder(sender as Button);
+            pnlContent.Controls.Clear();
+            LoadUC(new HopDongMain());
+        }
     }
 }
