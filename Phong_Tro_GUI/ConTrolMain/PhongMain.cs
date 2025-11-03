@@ -43,15 +43,24 @@ namespace Phong_Tro_GUI
 
         private void dgvDanhSachPhong_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return;
+            if (e.RowIndex < 0)
+                return;
 
-            var row = dgvDanhSachPhong.Rows[e.RowIndex];
-            txtMaPhong.Text = row.Cells["MaPhong"].Value?.ToString();
-            txtTenPhong.Text = row.Cells["TenPhong"].Value?.ToString();
-            txtGiaPhong.Text = row.Cells["GiaPhong"].Value?.ToString();
-            cboTrangThai.Text = row.Cells["TrangThai"].Value?.ToString();
-            txtMoTa.Text = row.Cells["MoTa"].Value?.ToString();
+            DataGridViewRow row = dgvDanhSachPhong.Rows[e.RowIndex];
+
+            // Hiển thị thông tin sang các ô bên phải
+            txtMaPhong.Text = row.Cells["MaPhong"].Value?.ToString() ?? "";
+            txtTenPhong.Text = row.Cells["TenPhong"].Value?.ToString() ?? "";
+            txtGiaPhong.Text = row.Cells["GiaPhong"].Value?.ToString() ?? "";
+            cboTrangThai.Text = row.Cells["TrangThai"].Value?.ToString() ?? "";
+            txtMoTa.Text = row.Cells["MoTa"].Value?.ToString() ?? "";
+
+            // Tô sáng dòng được chọn
+            dgvDanhSachPhong.ClearSelection();
+            row.Selected = true;
         }
+
+
 
         // ==================== THÊM ====================
         private void btnThem_Click(object sender, EventArgs e)
@@ -168,6 +177,11 @@ namespace Phong_Tro_GUI
             txtMoTa.Clear();
             cboTrangThai.SelectedIndex = -1;
             dgvDanhSachPhong.ClearSelection();
+        }
+
+        private void dgvDanhSachPhong_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

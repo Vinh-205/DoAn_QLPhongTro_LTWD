@@ -167,6 +167,8 @@
             this.dgvDanhSachPhong.RowHeadersWidth = 51;
             this.dgvDanhSachPhong.Size = new System.Drawing.Size(550, 260);
             this.dgvDanhSachPhong.TabIndex = 2;
+            this.dgvDanhSachPhong.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDanhSachPhong_CellClick);
+            this.dgvDanhSachPhong.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDanhSachPhong_CellContentClick);
             // 
             // btnThem
             // 
@@ -254,6 +256,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvDanhSachPhong)).EndInit();
             this.panelHeader.ResumeLayout(false);
             this.ResumeLayout(false);
+
         }
     }
 }

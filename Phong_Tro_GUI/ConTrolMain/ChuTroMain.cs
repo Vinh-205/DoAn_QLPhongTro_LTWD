@@ -87,7 +87,7 @@ namespace Phong_Tro_GUI
         {
             MoveActiveBorder(sender as Button);
             pnlContent.Controls.Clear();
-            LoadUC(new PhongMain());
+            LoadUC(new TrangChuMain());
         }
 
 

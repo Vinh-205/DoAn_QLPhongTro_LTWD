@@ -55,10 +55,7 @@ namespace Phong_Tro_GUI
                 string maPhong = cboPhong.SelectedValue?.ToString();
 
                 // === Load doanh thu phòng ===
-                var hoaDonList = thongKeBUS.DoanhThuTheoPhong(thang, nam);
-                if (!string.IsNullOrEmpty(maPhong))
-                    hoaDonList = hoaDonList.Where(x => x.MaPhong == maPhong).ToList();
-
+                var hoaDonList = thongKeBUS.DoanhThuTheoPhong(thang, nam, maPhong);
                 dgvHoaDon.DataSource = hoaDonList;
                 dgvHoaDon.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 dgvHoaDon.ClearSelection();

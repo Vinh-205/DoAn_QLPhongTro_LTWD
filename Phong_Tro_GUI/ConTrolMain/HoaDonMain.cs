@@ -1,6 +1,7 @@
 ﻿using Phong_Tro_BUS;
 using Phong_Tro_DAL.PhongTro;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -12,17 +13,44 @@ namespace Phong_Tro_GUI.ConTrolMain
         private ChiTietHoaDonBUS chiTietBUS;
         private PhongBUS phongBUS;
         private string selectedMaHD;
+        private string role; // "ChuTro" hoặc "NguoiThue"
+        private int maKhach; // nếu role là Người Thuê
 
+        // ==============================
+        // Constructor mặc định cho Designer
+        // ==============================
         public HoaDonMain()
         {
             InitializeComponent();
+            role = "ChuTro"; // default cho runtime nếu gọi constructor mặc định
+            maKhach = 0;
 
+            InitControls();
+        }
+
+        // ==============================
+        // Constructor runtime với role
+        // ==============================
+        public HoaDonMain(string userRole, int userMaKhach = 0)
+        {
+            InitializeComponent();
+            role = userRole;
+            maKhach = userMaKhach;
+
+            InitControls();
+        }
+
+        // ==============================
+        // Khởi tạo chung các control
+        // ==============================
+        private void InitControls()
+        {
             hoaDonBUS = new HoaDonBUS();
             chiTietBUS = new ChiTietHoaDonBUS();
             phongBUS = new PhongBUS();
 
-            LoadHoaDon();
             LoadPhong();
+            LoadHoaDon();
 
             // Hook events
             dgvHoaDon.CellClick += DgvHoaDon_CellClick;
@@ -30,23 +58,36 @@ namespace Phong_Tro_GUI.ConTrolMain
             btnSua.Click += BtnSua_Click;
             btnXoa.Click += BtnXoa_Click;
             btnLamMoi.Click += BtnLamMoi_Click;
-            txtTimKiem.TextChanged += TxtTimKiem_TextChanged;
+            txtTimKiem.TextChanged += TxtTimKiem;
         }
 
-        private void LoadHoaDon()
+        private void LoadHoaDon(string tuKhoa = "")
         {
-            var list = hoaDonBUS.LayTatCa();
+            List<HoaDon> list;
+
+            if (role == "ChuTro")
+            {
+                list = string.IsNullOrWhiteSpace(tuKhoa) ? hoaDonBUS.LayTatCa() : hoaDonBUS.TimKiem(tuKhoa);
+            }
+            else
+            {
+                // Người thuê chỉ xem hóa đơn của mình
+                list = string.IsNullOrWhiteSpace(tuKhoa)
+                    ? hoaDonBUS.LayTheoKhach(maKhach)
+                    : hoaDonBUS.TimKiem(tuKhoa).Where(h => h.HopDong?.KhachThue?.MaKhach == maKhach).ToList();
+            }
+
             dgvHoaDon.DataSource = list.Select(hd => new
             {
                 hd.MaHD,
-                TenKH = hd.HopDong?.KhachThue?.Ten,
+                TenKH = hd.HopDong?.KhachThue?.Ten ?? "",
                 hd.GiaPhong,
                 hd.TienDien,
                 hd.TienNuoc,
                 TienDichVu = chiTietBUS.LayTheoHoaDon(hd.MaHD).Sum(ct => (ct.DichVu?.DonGia ?? 0) * (ct.SoLuong ?? 0)),
                 hd.TongTien,
                 hd.NgayLap,
-                hd.TrangThai
+                TrangThai = hd.TrangThai ?? "N/A"
             }).ToList();
         }
 
@@ -56,6 +97,7 @@ namespace Phong_Tro_GUI.ConTrolMain
             cbPhong.DataSource = list;
             cbPhong.DisplayMember = "TenPhong";
             cbPhong.ValueMember = "MaPhong";
+            cbPhong.SelectedIndex = -1;
         }
 
         private void DgvHoaDon_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -70,22 +112,27 @@ namespace Phong_Tro_GUI.ConTrolMain
             txtMaHD.Text = hd.MaHD;
             txtTenKH.Text = hd.HopDong?.KhachThue?.Ten ?? "";
             dtpNgayLap.Value = hd.NgayLap ?? DateTime.Now;
-
             txtTienPhong.Text = (hd.GiaPhong ?? 0).ToString("N0");
             txtTienDien.Text = (hd.TienDien ?? 0).ToString("N0");
             txtTienNuoc.Text = (hd.TienNuoc ?? 0).ToString("N0");
 
-            var chiTiet = chiTietBUS.LayTheoHoaDon(hd.MaHD);
-            decimal tienDV = chiTiet.Sum(ct => (ct.DichVu?.DonGia ?? 0) * (ct.SoLuong ?? 0));
+            decimal tienDV = chiTietBUS.LayTheoHoaDon(hd.MaHD)
+                            .Sum(ct => (ct.DichVu?.DonGia ?? 0) * (ct.SoLuong ?? 0));
             txtTienDichVu.Text = tienDV.ToString("N0");
-
             txtTongTien.Text = hoaDonBUS.TinhTongTien(hd).ToString("N0");
+
             cbPhong.SelectedValue = hd.MaHopDong;
             cbTrangThai.SelectedItem = hd.TrangThai ?? "N/A";
         }
 
         private void BtnThem_Click(object sender, EventArgs e)
         {
+            if (role != "ChuTro")
+            {
+                MessageBox.Show("Bạn không có quyền thêm hóa đơn!");
+                return;
+            }
+
             try
             {
                 var hd = new HoaDon
@@ -111,6 +158,12 @@ namespace Phong_Tro_GUI.ConTrolMain
 
         private void BtnSua_Click(object sender, EventArgs e)
         {
+            if (role != "ChuTro")
+            {
+                MessageBox.Show("Bạn không có quyền sửa hóa đơn!");
+                return;
+            }
+
             try
             {
                 if (string.IsNullOrWhiteSpace(selectedMaHD)) return;
@@ -121,7 +174,8 @@ namespace Phong_Tro_GUI.ConTrolMain
                 hd.GiaPhong = decimal.TryParse(txtTienPhong.Text, out var gp) ? gp : 0;
                 hd.TienDien = decimal.TryParse(txtTienDien.Text, out var td) ? td : 0;
                 hd.TienNuoc = decimal.TryParse(txtTienNuoc.Text, out var tn) ? tn : 0;
-                hd.TienDichVu = chiTietBUS.LayTheoHoaDon(hd.MaHD).Sum(ct => (ct.DichVu?.DonGia ?? 0) * (ct.SoLuong ?? 0));
+                hd.TienDichVu = chiTietBUS.LayTheoHoaDon(hd.MaHD)
+                                .Sum(ct => (ct.DichVu?.DonGia ?? 0) * (ct.SoLuong ?? 0));
                 hd.TrangThai = cbTrangThai.SelectedItem?.ToString();
                 hd.NgayLap = dtpNgayLap.Value;
 
@@ -137,6 +191,12 @@ namespace Phong_Tro_GUI.ConTrolMain
 
         private void BtnXoa_Click(object sender, EventArgs e)
         {
+            if (role != "ChuTro")
+            {
+                MessageBox.Show("Bạn không có quyền xóa hóa đơn!");
+                return;
+            }
+
             try
             {
                 if (string.IsNullOrWhiteSpace(selectedMaHD)) return;
@@ -165,22 +225,9 @@ namespace Phong_Tro_GUI.ConTrolMain
             LoadHoaDon();
         }
 
-        private void TxtTimKiem_TextChanged(object sender, EventArgs e)
+        private void TxtTimKiem(object sender, EventArgs e)
         {
-            var keyword = txtTimKiem.Text.Trim();
-            dgvHoaDon.DataSource = hoaDonBUS.TimKiem(keyword)
-                .Select(hd => new
-                {
-                    hd.MaHD,
-                    TenKH = hd.HopDong?.KhachThue?.Ten,
-                    hd.GiaPhong,
-                    hd.TienDien,
-                    hd.TienNuoc,
-                    TienDichVu = chiTietBUS.LayTheoHoaDon(hd.MaHD).Sum(ct => (ct.DichVu?.DonGia ?? 0) * (ct.SoLuong ?? 0)),
-                    hd.TongTien,
-                    hd.NgayLap,
-                    hd.TrangThai
-                }).ToList();
+            LoadHoaDon(txtTimKiem.Text);
         }
     }
 }

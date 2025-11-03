@@ -131,6 +131,12 @@
     <Compile Include="ConTrolMain\ThongBaoMain.Designer.cs">
       <DependentUpon>ThongBaoMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConTrolMain\TrangChuMain.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConTrolMain\TrangChuMain.Designer.cs">
+      <DependentUpon>TrangChuMain.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConTrolUser\HoaDonUser.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -220,11 +226,17 @@
     <EmbeddedResource Include="ConTrolMain\HoaDonMain.resx">
       <DependentUpon>HoaDonMain.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ConTrolMain\PhongMain.resx">
+      <DependentUpon>PhongMain.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ConTrolMain\ThongKeMain.resx">
       <DependentUpon>ThongKeMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ConTrolMain\TienIchMain.resx">
       <DependentUpon>TienIchMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConTrolMain\TrangChuMain.resx">
+      <DependentUpon>TrangChuMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ConTrolUser\HoaDonUser.resx">
       <DependentUpon>HoaDonUser.cs</DependentUpon>

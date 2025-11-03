@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Data.Entity;
 using Phong_Tro_DAL.PhongTro;
 
 namespace Phong_Tro_BUS
@@ -15,11 +14,10 @@ namespace Phong_Tro_BUS
             db = new Connect();
         }
 
-        // 1️⃣ LẤY DANH SÁCH PHÒNG
+        // Lấy danh sách phòng
         public List<PhongDTO> LayDanhSachPhong()
         {
             return db.Phongs
-                     .AsNoTracking()
                      .Select(p => new PhongDTO
                      {
                          MaPhong = p.MaPhong,
@@ -28,79 +26,50 @@ namespace Phong_Tro_BUS
                      .ToList();
         }
 
-        // 2️⃣ DOANH THU THEO PHÒNG
-        public List<DoanhThuPhong> DoanhThuTheoPhong(int thang, int nam)
+        // Thống kê doanh thu theo phòng
+        public List<DoanhThuPhong> DoanhThuTheoPhong(int thang, int nam, string maPhong = null)
         {
             var hoaDonList = db.HoaDons
-                               .Include(hd => hd.HopDong)
-                               .AsNoTracking()
                                .Where(hd => hd.Thang == thang && hd.Nam == nam)
                                .ToList();
 
-            var result = hoaDonList
-                         .GroupBy(hd => hd.HopDong.MaPhong)
-                         .Select(g => new DoanhThuPhong
-                         {
-                             MaPhong = g.Key,
-                             TongTien = g.Sum(hd => hd.TongTien ?? 0)
-                         })
-                         .OrderByDescending(x => x.TongTien)
-                         .ToList();
+            // Lọc theo mã phòng nếu có
+            if (!string.IsNullOrEmpty(maPhong))
+            {
+                hoaDonList = hoaDonList.Where(hd => hd.HopDong.MaPhong == maPhong).ToList();
+            }
 
-            return result;
+            return hoaDonList
+                .GroupBy(hd => hd.HopDong.MaPhong)
+                .Select(g => new DoanhThuPhong
+                {
+                    MaPhong = g.Key,
+                    TongTien = g.Sum(hd => hd.TongTien ?? 0)
+                })
+                .OrderByDescending(x => x.TongTien)
+                .ToList();
         }
 
-        // 3️⃣ DOANH THU DỊCH VỤ
+        // Thống kê doanh thu dịch vụ
         public List<DoanhThuDichVu> DoanhThuDichVuTheoThang(int thang, int nam)
         {
             var chiTietList = db.ChiTietHoaDons
-                                .Include(ct => ct.HoaDon)
-                                .Include(ct => ct.DichVu)
-                                .AsNoTracking()
                                 .Where(ct => ct.HoaDon.Thang == thang && ct.HoaDon.Nam == nam)
                                 .ToList();
 
-            var result = chiTietList
-                         .GroupBy(ct => new { ct.MaDV, ct.DichVu.TenDV })
-                         .Select(g => new DoanhThuDichVu
-                         {
-                             MaDV = g.Key.MaDV,
-                             TenDV = g.Key.TenDV,
-                             TongTien = g.Sum(ct => ct.ThanhTien ?? 0)
-                         })
-                         .OrderByDescending(x => x.TongTien)
-                         .ToList();
-
-            return result;
+            return chiTietList
+                .GroupBy(ct => new { ct.MaDV, ct.DichVu.TenDV })
+                .Select(g => new DoanhThuDichVu
+                {
+                    MaDV = g.Key.MaDV,
+                    TenDV = g.Key.TenDV,
+                    TongTien = g.Sum(ct => ct.ThanhTien ?? 0)
+                })
+                .OrderByDescending(x => x.TongTien)
+                .ToList();
         }
 
-        // 4️⃣ THỐNG KÊ TỔNG HỢP
-        public ThongKeDoanhThu TongHopDoanhThu(int thang, int nam)
-        {
-            var doanhThuPhong = db.HoaDons
-                                  .Where(hd => hd.Thang == thang && hd.Nam == nam)
-                                  .Sum(hd => (decimal?)hd.TongTien) ?? 0;
-
-            var doanhThuDichVu = db.ChiTietHoaDons
-                                   .Where(ct => ct.HoaDon.Thang == thang && ct.HoaDon.Nam == nam)
-                                   .Sum(ct => (decimal?)ct.ThanhTien) ?? 0;
-
-            var tongSoHD = db.HoaDons.Count(hd => hd.Thang == thang && hd.Nam == nam);
-            var tongDoanhThu = doanhThuPhong + doanhThuDichVu;
-
-            return new ThongKeDoanhThu
-            {
-                Thang = thang,
-                Nam = nam,
-                TongSoHoaDon = tongSoHD,
-                DoanhThuPhong = doanhThuPhong,
-                DoanhThuDichVu = doanhThuDichVu,
-                TongDoanhThu = tongDoanhThu,
-                NgayCapNhat = DateTime.Now
-            };
-        }
-
-        // 5️⃣ GIẢI PHÓNG
+        // Giải phóng tài nguyên
         public void Dispose()
         {
             db?.Dispose();
@@ -108,7 +77,6 @@ namespace Phong_Tro_BUS
         }
     }
 
-    // DTO PHỤ TRỢ
     public class PhongDTO
     {
         public string MaPhong { get; set; }
