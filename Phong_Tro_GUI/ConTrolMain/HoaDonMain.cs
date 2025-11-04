@@ -1,7 +1,6 @@
 ﻿using Phong_Tro_BUS;
 using Phong_Tro_DAL.PhongTro;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -10,129 +9,78 @@ namespace Phong_Tro_GUI.ConTrolMain
     public partial class HoaDonMain : UserControl
     {
         private HoaDonBUS hoaDonBUS;
-        private ChiTietHoaDonBUS chiTietBUS;
-        private PhongBUS phongBUS;
-        private string selectedMaHD;
-        private string role; // "ChuTro" hoặc "NguoiThue"
-        private int maKhach; // nếu role là Người Thuê
+        private Connect connect;
 
-        // ==============================
-        // Constructor mặc định cho Designer
-        // ==============================
         public HoaDonMain()
         {
             InitializeComponent();
-            role = "ChuTro"; // default cho runtime nếu gọi constructor mặc định
-            maKhach = 0;
-
-            InitControls();
-        }
-
-        // ==============================
-        // Constructor runtime với role
-        // ==============================
-        public HoaDonMain(string userRole, int userMaKhach = 0)
-        {
-            InitializeComponent();
-            role = userRole;
-            maKhach = userMaKhach;
-
-            InitControls();
-        }
-
-        // ==============================
-        // Khởi tạo chung các control
-        // ==============================
-        private void InitControls()
-        {
             hoaDonBUS = new HoaDonBUS();
-            chiTietBUS = new ChiTietHoaDonBUS();
-            phongBUS = new PhongBUS();
+            connect = new Connect();
 
-            LoadPhong();
-            LoadHoaDon();
+            LoadData();
+            LoadComboBoxPhong();
+            HookEvents();
+        }
 
-            // Hook events
-            dgvHoaDon.CellClick += DgvHoaDon_CellClick;
+        private void HookEvents()
+        {
             btnThem.Click += BtnThem_Click;
             btnSua.Click += BtnSua_Click;
             btnXoa.Click += BtnXoa_Click;
             btnLamMoi.Click += BtnLamMoi_Click;
-            txtTimKiem.TextChanged += TxtTimKiem;
+            btnTimKiem.Click += BtnTimKiem_Click;
+            btnGuiThongBao.Click += BtnGuiThongBao_Click;
+            dgvHoaDon.SelectionChanged += DgvHoaDon_SelectionChanged;
         }
 
-        private void LoadHoaDon(string tuKhoa = "")
+        private void LoadData()
         {
-            List<HoaDon> list;
-
-            if (role == "ChuTro")
-            {
-                list = string.IsNullOrWhiteSpace(tuKhoa) ? hoaDonBUS.LayTatCa() : hoaDonBUS.TimKiem(tuKhoa);
-            }
-            else
-            {
-                // Người thuê chỉ xem hóa đơn của mình
-                list = string.IsNullOrWhiteSpace(tuKhoa)
-                    ? hoaDonBUS.LayTheoKhach(maKhach)
-                    : hoaDonBUS.TimKiem(tuKhoa).Where(h => h.HopDong?.KhachThue?.MaKhach == maKhach).ToList();
-            }
-
-            dgvHoaDon.DataSource = list.Select(hd => new
-            {
-                hd.MaHD,
-                TenKH = hd.HopDong?.KhachThue?.Ten ?? "",
-                hd.GiaPhong,
-                hd.TienDien,
-                hd.TienNuoc,
-                TienDichVu = chiTietBUS.LayTheoHoaDon(hd.MaHD).Sum(ct => (ct.DichVu?.DonGia ?? 0) * (ct.SoLuong ?? 0)),
-                hd.TongTien,
-                hd.NgayLap,
-                TrangThai = hd.TrangThai ?? "N/A"
-            }).ToList();
+            dgvHoaDon.DataSource = hoaDonBUS.GetAll()
+                .Select(h => new
+                {
+                    h.MaHD,
+                    TenKH = h.HopDong.KhachThue.Ten,
+                    Phong = h.HopDong.Phong.TenPhong,
+                    h.NgayLap,
+                    h.TienDien,
+                    h.TienNuoc,
+                    h.TienDichVu,
+                    h.GiaPhong,
+                    h.TongTien,
+                    h.TrangThai
+                }).ToList();
+            ClearForm();
         }
 
-        private void LoadPhong()
+        private void LoadComboBoxPhong()
         {
-            var list = phongBUS.LayTatCa();
-            cbPhong.DataSource = list;
+            var phongs = connect.Phongs.ToList();
+
+            cbPhong.DataSource = phongs;
             cbPhong.DisplayMember = "TenPhong";
             cbPhong.ValueMember = "MaPhong";
-            cbPhong.SelectedIndex = -1;
+
+            cbPhongThongBao.DataSource = phongs;
+            cbPhongThongBao.DisplayMember = "TenPhong";
+            cbPhongThongBao.ValueMember = "MaPhong";
         }
 
-        private void DgvHoaDon_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void ClearForm()
         {
-            if (e.RowIndex < 0) return;
-            selectedMaHD = dgvHoaDon.Rows[e.RowIndex].Cells["MaHD"].Value?.ToString();
-            if (string.IsNullOrWhiteSpace(selectedMaHD)) return;
-
-            var hd = hoaDonBUS.LayTheoMa(selectedMaHD);
-            if (hd == null) return;
-
-            txtMaHD.Text = hd.MaHD;
-            txtTenKH.Text = hd.HopDong?.KhachThue?.Ten ?? "";
-            dtpNgayLap.Value = hd.NgayLap ?? DateTime.Now;
-            txtTienPhong.Text = (hd.GiaPhong ?? 0).ToString("N0");
-            txtTienDien.Text = (hd.TienDien ?? 0).ToString("N0");
-            txtTienNuoc.Text = (hd.TienNuoc ?? 0).ToString("N0");
-
-            decimal tienDV = chiTietBUS.LayTheoHoaDon(hd.MaHD)
-                            .Sum(ct => (ct.DichVu?.DonGia ?? 0) * (ct.SoLuong ?? 0));
-            txtTienDichVu.Text = tienDV.ToString("N0");
-            txtTongTien.Text = hoaDonBUS.TinhTongTien(hd).ToString("N0");
-
-            cbPhong.SelectedValue = hd.MaHopDong;
-            cbTrangThai.SelectedItem = hd.TrangThai ?? "N/A";
+            txtMaHD.Clear();
+            txtTenKH.Clear();
+            cbPhong.SelectedIndex = -1;
+            dtpNgayLap.Value = DateTime.Now;
+            txtTienPhong.Clear();
+            txtTienDien.Clear();
+            txtTienNuoc.Clear();
+            txtTienDichVu.Clear();
+            txtTongTien.Clear();
+            cbTrangThai.SelectedIndex = -1;
         }
 
         private void BtnThem_Click(object sender, EventArgs e)
         {
-            if (role != "ChuTro")
-            {
-                MessageBox.Show("Bạn không có quyền thêm hóa đơn!");
-                return;
-            }
-
             try
             {
                 var hd = new HoaDon
@@ -140,94 +88,164 @@ namespace Phong_Tro_GUI.ConTrolMain
                     MaHD = txtMaHD.Text.Trim(),
                     MaHopDong = Convert.ToInt32(cbPhong.SelectedValue),
                     NgayLap = dtpNgayLap.Value,
-                    GiaPhong = decimal.TryParse(txtTienPhong.Text, out var gp) ? gp : 0,
-                    TienDien = decimal.TryParse(txtTienDien.Text, out var td) ? td : 0,
-                    TienNuoc = decimal.TryParse(txtTienNuoc.Text, out var tn) ? tn : 0,
-                    TienDichVu = 0,
+                    GiaPhong = string.IsNullOrEmpty(txtTienPhong.Text) ? 0 : Convert.ToDecimal(txtTienPhong.Text),
+                    TienDien = string.IsNullOrEmpty(txtTienDien.Text) ? 0 : Convert.ToDecimal(txtTienDien.Text),
+                    TienNuoc = string.IsNullOrEmpty(txtTienNuoc.Text) ? 0 : Convert.ToDecimal(txtTienNuoc.Text),
+                    TienDichVu = string.IsNullOrEmpty(txtTienDichVu.Text) ? 0 : Convert.ToDecimal(txtTienDichVu.Text),
                     TrangThai = cbTrangThai.SelectedItem?.ToString()
                 };
-                hoaDonBUS.Them(hd);
-                LoadHoaDon();
-                MessageBox.Show("✅ Thêm hóa đơn thành công!");
+
+                if (hoaDonBUS.Add(hd))
+                {
+                    MessageBox.Show("Thêm hóa đơn thành công!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadData();
+                }
+                else
+                {
+                    MessageBox.Show("Thêm hóa đơn thất bại!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("❌ Lỗi khi thêm: " + ex.Message);
+                MessageBox.Show("Lỗi: " + ex.Message);
             }
         }
 
         private void BtnSua_Click(object sender, EventArgs e)
         {
-            if (role != "ChuTro")
-            {
-                MessageBox.Show("Bạn không có quyền sửa hóa đơn!");
-                return;
-            }
-
             try
             {
-                if (string.IsNullOrWhiteSpace(selectedMaHD)) return;
-                var hd = hoaDonBUS.LayTheoMa(selectedMaHD);
-                if (hd == null) return;
+                var hd = hoaDonBUS.GetById(txtMaHD.Text.Trim());
+                if (hd == null)
+                {
+                    MessageBox.Show("Hóa đơn không tồn tại!");
+                    return;
+                }
 
-                hd.MaHopDong = Convert.ToInt32(cbPhong.SelectedValue);
-                hd.GiaPhong = decimal.TryParse(txtTienPhong.Text, out var gp) ? gp : 0;
-                hd.TienDien = decimal.TryParse(txtTienDien.Text, out var td) ? td : 0;
-                hd.TienNuoc = decimal.TryParse(txtTienNuoc.Text, out var tn) ? tn : 0;
-                hd.TienDichVu = chiTietBUS.LayTheoHoaDon(hd.MaHD)
-                                .Sum(ct => (ct.DichVu?.DonGia ?? 0) * (ct.SoLuong ?? 0));
+                hd.GiaPhong = string.IsNullOrEmpty(txtTienPhong.Text) ? 0 : Convert.ToDecimal(txtTienPhong.Text);
+                hd.TienDien = string.IsNullOrEmpty(txtTienDien.Text) ? 0 : Convert.ToDecimal(txtTienDien.Text);
+                hd.TienNuoc = string.IsNullOrEmpty(txtTienNuoc.Text) ? 0 : Convert.ToDecimal(txtTienNuoc.Text);
+                hd.TienDichVu = string.IsNullOrEmpty(txtTienDichVu.Text) ? 0 : Convert.ToDecimal(txtTienDichVu.Text);
                 hd.TrangThai = cbTrangThai.SelectedItem?.ToString();
-                hd.NgayLap = dtpNgayLap.Value;
 
-                hoaDonBUS.Sua(hd);
-                LoadHoaDon();
-                MessageBox.Show("✅ Cập nhật thành công!");
+                if (hoaDonBUS.Update(hd))
+                {
+                    MessageBox.Show("Cập nhật hóa đơn thành công!");
+                    LoadData();
+                }
+                else
+                {
+                    MessageBox.Show("Cập nhật hóa đơn thất bại!");
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("❌ Lỗi khi sửa: " + ex.Message);
+                MessageBox.Show("Lỗi: " + ex.Message);
             }
         }
 
         private void BtnXoa_Click(object sender, EventArgs e)
         {
-            if (role != "ChuTro")
+            var maHD = txtMaHD.Text.Trim();
+            if (string.IsNullOrEmpty(maHD))
             {
-                MessageBox.Show("Bạn không có quyền xóa hóa đơn!");
+                MessageBox.Show("Chọn hóa đơn để xóa!");
                 return;
             }
 
-            try
+            if (MessageBox.Show("Bạn có chắc muốn xóa hóa đơn này?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                if (string.IsNullOrWhiteSpace(selectedMaHD)) return;
-                hoaDonBUS.Xoa(selectedMaHD);
-                LoadHoaDon();
-                MessageBox.Show("✅ Xóa hóa đơn thành công!");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("❌ Lỗi khi xóa: " + ex.Message);
+                if (hoaDonBUS.Delete(maHD))
+                {
+                    MessageBox.Show("Xóa hóa đơn thành công!");
+                    LoadData();
+                }
+                else
+                {
+                    MessageBox.Show("Xóa hóa đơn thất bại!");
+                }
             }
         }
 
         private void BtnLamMoi_Click(object sender, EventArgs e)
         {
-            txtMaHD.Clear();
-            txtTenKH.Clear();
-            txtTienPhong.Clear();
-            txtTienDien.Clear();
-            txtTienNuoc.Clear();
-            txtTienDichVu.Clear();
-            txtTongTien.Clear();
-            cbPhong.SelectedIndex = -1;
-            cbTrangThai.SelectedIndex = -1;
-            dtpNgayLap.Value = DateTime.Now;
-            LoadHoaDon();
+            ClearForm();
         }
 
-        private void TxtTimKiem(object sender, EventArgs e)
+        private void BtnTimKiem_Click(object sender, EventArgs e)
         {
-            LoadHoaDon(txtTimKiem.Text);
+            var keyword = txtTimKiem.Text.Trim().ToLower();
+            dgvHoaDon.DataSource = hoaDonBUS.GetAll()
+                .Where(h => h.MaHD.ToLower().Contains(keyword) ||
+                            h.HopDong.KhachThue.Ten.ToLower().Contains(keyword))
+                .Select(h => new
+                {
+                    h.MaHD,
+                    TenKH = h.HopDong.KhachThue.Ten,
+                    Phong = h.HopDong.Phong.TenPhong,
+                    h.NgayLap,
+                    h.TienDien,
+                    h.TienNuoc,
+                    h.TienDichVu,
+                    h.GiaPhong,
+                    h.TongTien,
+                    h.TrangThai
+                }).ToList();
+        }
+
+        private void DgvHoaDon_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvHoaDon.SelectedRows.Count > 0)
+            {
+                var row = dgvHoaDon.SelectedRows[0];
+                txtMaHD.Text = row.Cells["MaHD"].Value.ToString();
+                txtTenKH.Text = row.Cells["TenKH"].Value.ToString();
+                cbPhong.Text = row.Cells["Phong"].Value.ToString();
+                dtpNgayLap.Value = Convert.ToDateTime(row.Cells["NgayLap"].Value);
+                txtTienPhong.Text = row.Cells["GiaPhong"].Value.ToString();
+                txtTienDien.Text = row.Cells["TienDien"].Value.ToString();
+                txtTienNuoc.Text = row.Cells["TienNuoc"].Value.ToString();
+                txtTienDichVu.Text = row.Cells["TienDichVu"].Value.ToString();
+                txtTongTien.Text = row.Cells["TongTien"].Value?.ToString() ?? "0";
+                cbTrangThai.Text = row.Cells["TrangThai"].Value?.ToString() ?? "";
+
+            }
+        }
+
+        // 🔹 Phần gửi thông báo theo Cách 2
+        private void BtnGuiThongBao_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Lấy HopDong theo phòng được chọn
+                var hopDong = connect.HopDongs
+                    .FirstOrDefault(h => h.MaPhong == cbPhongThongBao.SelectedValue.ToString());
+
+                if (hopDong == null)
+                {
+                    MessageBox.Show("Phòng chưa có khách thuê!");
+                    return;
+                }
+
+                // Gửi thông báo tới khách thuê
+                var thongBao = new ThongBao
+                {
+                    MaTK_Gui = 1, // admin
+                    MaTK_Nhan = hopDong.KhachThue.MaKhach,
+                    NoiDung = txtNoiDungThongBao.Text,
+                    NgayGui = DateTime.Now
+                };
+
+                connect.ThongBaos.Add(thongBao);
+                connect.SaveChanges();
+
+                MessageBox.Show("Gửi thông báo thành công!");
+                txtNoiDungThongBao.Clear();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi gửi thông báo: " + ex.Message);
+            }
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
-using Phong_Tro_DAL.PhongTro; // đúng namespace DAL
+using Phong_Tro_DAL.PhongTro; 
 
 namespace Phong_Tro_BUS
 {

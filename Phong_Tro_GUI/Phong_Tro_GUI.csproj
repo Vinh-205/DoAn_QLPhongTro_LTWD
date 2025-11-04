@@ -232,6 +232,9 @@
     <EmbeddedResource Include="ConTrolMain\HoaDonMain.resx">
       <DependentUpon>HoaDonMain.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ConTrolMain\HopDongMain.resx">
+      <DependentUpon>HopDongMain.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ConTrolMain\PhongMain.resx">
       <DependentUpon>PhongMain.cs</DependentUpon>
     </EmbeddedResource>

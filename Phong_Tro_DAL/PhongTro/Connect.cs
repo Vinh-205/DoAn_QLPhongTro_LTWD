@@ -23,7 +23,7 @@ namespace Phong_Tro_DAL.PhongTro
         public virtual DbSet<Phong> Phongs { get; set; }
         public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
         public virtual DbSet<ThongBao> ThongBaos { get; set; }
-        public virtual DbSet<ThongKeDoanhThu> ThongKeDoanhThus { get; set; }
+        //public virtual DbSet<ThongKeDoanhThu> ThongKeDoanhThus { get; set; }
         public virtual DbSet<ThuePhong> ThuePhongs { get; set; }
         public virtual DbSet<TienIch> TienIches { get; set; }
 

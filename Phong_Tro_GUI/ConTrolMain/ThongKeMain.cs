@@ -1,6 +1,7 @@
 ﻿using Phong_Tro_BUS;
+using Phong_Tro_DAL.PhongTro;
 using System;
-using System.Drawing;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -9,102 +10,94 @@ namespace Phong_Tro_GUI
 {
     public partial class ThongKeMain : UserControl
     {
-        private readonly ThongKeBUS thongKeBUS = new ThongKeBUS();
+        private ThongKeBUS thongKeBUS;
 
         public ThongKeMain()
         {
             InitializeComponent();
-            LoadComboBox();
+            thongKeBUS = new ThongKeBUS();
+            LoadCboNamThang();
+            LoadDanhSachPhong();
         }
 
-        private void LoadComboBox()
+        private void LoadCboNamThang()
         {
-            // Tháng
+            // Tháng 1 -> 12
             cboThang.Items.Clear();
-            for (int i = 1; i <= 12; i++)
-                cboThang.Items.Add(i);
+            for (int i = 1; i <= 12; i++) cboThang.Items.Add(i);
+            cboThang.SelectedIndex = 0;
 
-            // Năm
+            // Năm: lấy 5 năm gần nhất
             cboNam.Items.Clear();
-            for (int i = 2020; i <= DateTime.Now.Year; i++)
-                cboNam.Items.Add(i);
+            int currentYear = DateTime.Now.Year;
+            for (int i = currentYear - 4; i <= currentYear; i++) cboNam.Items.Add(i);
+            cboNam.SelectedIndex = 4;
+        }
 
-            cboThang.SelectedIndex = DateTime.Now.Month - 1;
-            cboNam.SelectedIndex = cboNam.Items.Count - 1;
-
-            // Phòng
+        private void LoadDanhSachPhong()
+        {
             var phongList = thongKeBUS.LayDanhSachPhong();
-            cboPhong.DataSource = phongList;
-            cboPhong.DisplayMember = "TenPhong";
-            cboPhong.ValueMember = "MaPhong";
-            cboPhong.SelectedIndex = -1;
+            cboPhong.Items.Clear();
+            cboPhong.Items.Add("Tất cả");
+            cboPhong.Items.AddRange(phongList.Select(p => p.TenPhong).ToArray());
+            cboPhong.SelectedIndex = 0;
         }
 
         private void btnThongKe_Click(object sender, EventArgs e)
         {
-            try
+            int thang = Convert.ToInt32(cboThang.SelectedItem);
+            int nam = Convert.ToInt32(cboNam.SelectedItem);
+            string tenPhong = cboPhong.SelectedItem.ToString();
+            string maPhong = null;
+
+            if (tenPhong != "Tất cả")
             {
-                if (cboThang.SelectedItem == null || cboNam.SelectedItem == null)
-                {
-                    MessageBox.Show("Vui lòng chọn tháng và năm!", "Thiếu dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                int thang = Convert.ToInt32(cboThang.SelectedItem);
-                int nam = Convert.ToInt32(cboNam.SelectedItem);
-                string maPhong = cboPhong.SelectedValue?.ToString();
-
-                // === Load doanh thu phòng ===
-                var hoaDonList = thongKeBUS.DoanhThuTheoPhong(thang, nam, maPhong);
-                dgvHoaDon.DataSource = hoaDonList;
-                dgvHoaDon.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                dgvHoaDon.ClearSelection();
-
-                // === Load doanh thu dịch vụ ===
-                var dvList = thongKeBUS.DoanhThuDichVuTheoThang(thang, nam);
-                dgvDoanhThuDichVu.DataSource = dvList;
-                dgvDoanhThuDichVu.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                dgvDoanhThuDichVu.ClearSelection();
-
-                // === Tính tổng ===
-                txtSoHD.Text = hoaDonList.Count.ToString();
-                txtTongTien.Text = hoaDonList.Sum(x => x.TongTien).ToString("N0");
-                txtTBHoaDon.Text = hoaDonList.Count > 0
-                    ? (hoaDonList.Sum(x => x.TongTien) / hoaDonList.Count).ToString("N0")
-                    : "0";
-
-                // === Biểu đồ ===
-                chart1.Series.Clear();
-                Series series = new Series("DoanhThuPhòng")
-                {
-                    ChartType = SeriesChartType.Pie
-                };
-                foreach (var item in hoaDonList)
-                {
-                    series.Points.AddXY(item.MaPhong, item.TongTien);
-                }
-
-                chart1.Series.Add(series);
-                chart1.Legends[0].Docking = Docking.Bottom;
-                chart1.Legends[0].Alignment = StringAlignment.Center;
+                maPhong = thongKeBUS.LayDanhSachPhong()
+                                    .FirstOrDefault(p => p.TenPhong == tenPhong)?.MaPhong;
             }
-            catch (Exception ex)
+
+            // Tổng hợp
+            var tongHop = thongKeBUS.TongHopDoanhThu(thang, nam, maPhong);
+            txtSoHD.Text = tongHop.TongSoHoaDon.ToString();
+            txtTongTien.Text = tongHop.TongDoanhThu?.ToString("N0");
+            txtTBHoaDon.Text = (tongHop.TongSoHoaDon.HasValue && tongHop.TongSoHoaDon.Value > 0)
+                 ? ((decimal)(tongHop.TongDoanhThu ?? 0) / tongHop.TongSoHoaDon.Value).ToString("N0")
+                  : "0";
+
+
+            // DataGridView doanh thu dịch vụ
+            dgvDoanhThuDichVu.DataSource = thongKeBUS.DoanhThuDichVuTheoThang(thang, nam, maPhong);
+
+            // Chart Pie
+            var dsChart = thongKeBUS.DoanhThuDichVuTheoThang(thang, nam, maPhong);
+            chart1.Series.Clear();
+            var series = new Series
             {
-                MessageBox.Show("Lỗi khi thống kê: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Name = "DoanhThu",
+                IsValueShownAsLabel = true,
+                ChartType = SeriesChartType.Pie
+            };
+            chart1.Series.Add(series);
+            chart1.Legends[0].Docking = Docking.Bottom;
+
+            foreach (var item in dsChart)
+            {
+                series.Points.AddXY(item.TenDV, item.TongTien);
             }
         }
 
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
-            dgvHoaDon.DataSource = null;
-            dgvDoanhThuDichVu.DataSource = null;
-            txtSoHD.Clear();
-            txtTongTien.Clear();
-            txtTBHoaDon.Clear();
-            chart1.Series.Clear();
-            cboThang.SelectedIndex = DateTime.Now.Month - 1;
+            cboThang.SelectedIndex = 0;
             cboNam.SelectedIndex = cboNam.Items.Count - 1;
-            cboPhong.SelectedIndex = -1;
+            cboPhong.SelectedIndex = 0;
+            dgvDoanhThuDichVu.DataSource = null;
+            txtSoHD.Text = "";
+            txtTongTien.Text = "";
+            txtTBHoaDon.Text = "";
+            chart1.Series.Clear();
         }
+
+        // Xuất Excel / PDF có thể thêm sau
     }
 }

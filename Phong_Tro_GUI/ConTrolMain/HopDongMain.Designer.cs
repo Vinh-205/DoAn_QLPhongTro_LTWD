@@ -216,6 +216,7 @@
             this.dgvHopDong.RowHeadersWidth = 51;
             this.dgvHopDong.Size = new System.Drawing.Size(720, 244);
             this.dgvHopDong.TabIndex = 35;
+            this.dgvHopDong.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvHopDong_CellClick);
             // 
             // panel1
             // 
@@ -237,8 +238,9 @@
             this.lblTieuDe.TabIndex = 19;
             this.lblTieuDe.Text = "QUẢN LÝ HỢP ĐỒNG THUÊ PHÒNG";
             // 
-            // HopDongMain (UserControl)
+            // HopDongMain
             // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox1);
@@ -251,6 +253,7 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
+
         }
 
         #endregion

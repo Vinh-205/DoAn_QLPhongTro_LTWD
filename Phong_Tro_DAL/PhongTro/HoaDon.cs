@@ -46,10 +46,12 @@ namespace Phong_Tro_DAL.PhongTro
 
         public DateTime? NgayLap { get; set; }
 
+        public string TrangThai { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ChiTietHoaDon> ChiTietHoaDons { get; set; }
 
         public virtual HopDong HopDong { get; set; }
-        public string TrangThai { get; set; }
+        
     }
 }

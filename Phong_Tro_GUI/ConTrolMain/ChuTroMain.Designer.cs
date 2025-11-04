@@ -9,7 +9,6 @@
         private System.Windows.Forms.Button btnPhong;
         private System.Windows.Forms.Button btnHoaDon;
         private System.Windows.Forms.Button btnThongBao;
-        private System.Windows.Forms.Button btnThongKe;
         private System.Windows.Forms.Button btnDichVu;
         private System.Windows.Forms.Button btnHopDong;
         private System.Windows.Forms.Button btnDangXuat;
@@ -24,7 +23,6 @@
             this.btnDangXuat = new System.Windows.Forms.Button();
             this.btnHopDong = new System.Windows.Forms.Button();
             this.btnDichVu = new System.Windows.Forms.Button();
-            this.btnThongKe = new System.Windows.Forms.Button();
             this.btnThongBao = new System.Windows.Forms.Button();
             this.btnHoaDon = new System.Windows.Forms.Button();
             this.btnPhong = new System.Windows.Forms.Button();
@@ -44,7 +42,6 @@
             this.pnlSidebar.Controls.Add(this.btnDangXuat);
             this.pnlSidebar.Controls.Add(this.btnHopDong);
             this.pnlSidebar.Controls.Add(this.btnDichVu);
-            this.pnlSidebar.Controls.Add(this.btnThongKe);
             this.pnlSidebar.Controls.Add(this.btnThongBao);
             this.pnlSidebar.Controls.Add(this.btnHoaDon);
             this.pnlSidebar.Controls.Add(this.btnPhong);
@@ -68,7 +65,7 @@
             // 
             // btnHopDong
             // 
-            this.btnHopDong.Location = new System.Drawing.Point(10, 370);
+            this.btnHopDong.Location = new System.Drawing.Point(10, 424);
             this.btnHopDong.Name = "btnHopDong";
             this.btnHopDong.Size = new System.Drawing.Size(180, 40);
             this.btnHopDong.TabIndex = 7;
@@ -78,7 +75,7 @@
             // 
             // btnDichVu
             // 
-            this.btnDichVu.Location = new System.Drawing.Point(10, 320);
+            this.btnDichVu.Location = new System.Drawing.Point(10, 277);
             this.btnDichVu.Name = "btnDichVu";
             this.btnDichVu.Size = new System.Drawing.Size(180, 40);
             this.btnDichVu.TabIndex = 6;
@@ -86,19 +83,9 @@
             this.btnDichVu.UseVisualStyleBackColor = true;
             this.btnDichVu.Click += new System.EventHandler(this.btnDichVu_Click);
             // 
-            // btnThongKe
-            // 
-            this.btnThongKe.Location = new System.Drawing.Point(10, 270);
-            this.btnThongKe.Name = "btnThongKe";
-            this.btnThongKe.Size = new System.Drawing.Size(180, 40);
-            this.btnThongKe.TabIndex = 5;
-            this.btnThongKe.Text = "📊 Thống kê";
-            this.btnThongKe.UseVisualStyleBackColor = true;
-            this.btnThongKe.Click += new System.EventHandler(this.btnThongKe_Click);
-            // 
             // btnThongBao
             // 
-            this.btnThongBao.Location = new System.Drawing.Point(10, 220);
+            this.btnThongBao.Location = new System.Drawing.Point(10, 201);
             this.btnThongBao.Name = "btnThongBao";
             this.btnThongBao.Size = new System.Drawing.Size(180, 40);
             this.btnThongBao.TabIndex = 4;
@@ -108,7 +95,7 @@
             // 
             // btnHoaDon
             // 
-            this.btnHoaDon.Location = new System.Drawing.Point(10, 170);
+            this.btnHoaDon.Location = new System.Drawing.Point(10, 352);
             this.btnHoaDon.Name = "btnHoaDon";
             this.btnHoaDon.Size = new System.Drawing.Size(180, 40);
             this.btnHoaDon.TabIndex = 3;
@@ -118,7 +105,7 @@
             // 
             // btnPhong
             // 
-            this.btnPhong.Location = new System.Drawing.Point(10, 120);
+            this.btnPhong.Location = new System.Drawing.Point(10, 136);
             this.btnPhong.Name = "btnPhong";
             this.btnPhong.Size = new System.Drawing.Size(180, 40);
             this.btnPhong.TabIndex = 2;
