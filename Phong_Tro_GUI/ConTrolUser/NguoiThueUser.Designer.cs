@@ -9,7 +9,6 @@
         private System.Windows.Forms.Button btnPhong;
         private System.Windows.Forms.Button btnHoaDon;
         private System.Windows.Forms.Button btnThongBao;
-        private System.Windows.Forms.Button btnHopDong;
         private System.Windows.Forms.Button btnDangXuat;
         private System.Windows.Forms.Panel pnlHeader;
         private System.Windows.Forms.Label lblTitle;
@@ -20,7 +19,6 @@
         {
             this.pnlSidebar = new System.Windows.Forms.Panel();
             this.btnDangXuat = new System.Windows.Forms.Button();
-            this.btnHopDong = new System.Windows.Forms.Button();
             this.btnThongTin = new System.Windows.Forms.Button();
             this.btnThongKe = new System.Windows.Forms.Button();
             this.btnThongBao = new System.Windows.Forms.Button();
@@ -40,7 +38,6 @@
             // 
             this.pnlSidebar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(60)))), ((int)(((byte)(120)))));
             this.pnlSidebar.Controls.Add(this.btnDangXuat);
-            this.pnlSidebar.Controls.Add(this.btnHopDong);
             this.pnlSidebar.Controls.Add(this.btnThongTin);
             this.pnlSidebar.Controls.Add(this.btnThongKe);
             this.pnlSidebar.Controls.Add(this.btnThongBao);
@@ -63,16 +60,6 @@
             this.btnDangXuat.Text = "🚪 Đăng xuất";
             this.btnDangXuat.UseVisualStyleBackColor = true;
             this.btnDangXuat.Click += new System.EventHandler(this.btnDangXuat_Click_1);
-            // 
-            // btnHopDong
-            // 
-            this.btnHopDong.Location = new System.Drawing.Point(10, 346);
-            this.btnHopDong.Name = "btnHopDong";
-            this.btnHopDong.Size = new System.Drawing.Size(180, 40);
-            this.btnHopDong.TabIndex = 7;
-            this.btnHopDong.Text = "📄 Hợp Đồng";
-            this.btnHopDong.UseVisualStyleBackColor = true;
-            this.btnHopDong.Click += new System.EventHandler(this.btnHopDong_Click);
             // 
             // btnThongTin
             // 
